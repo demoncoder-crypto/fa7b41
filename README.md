@@ -5,44 +5,6 @@ It implements a node-based UI for visualizing a DAG of forms and configuring pre
 
 ## Running Locally
 
-### Prerequisites
-
-- Node.js (v18+ recommended)
-- npm
-
-### 1. Start the Mock Server
-
-The mock server provides the `/action-blueprint-graph-get` endpoint.
-
-1.  Navigate to the `frontendchallengeserver` directory (cloned separately):
-    ```bash
-    cd ../frontendchallengeserver # Adjust path if your server is elsewhere
-    ```
-2.  Install dependencies:
-    ```bash
-    npm install
-    ```
-3.  Start the server:
-    ```bash
-    npm start
-    ```
-    The server will run on `http://localhost:3000`.
-
-### 2. Start the Frontend Application
-
-1.  Navigate to this project's root directory (`journey-builder-ui`):
-    ```bash
-    cd path/to/journey-builder-ui 
-    ```
-2.  Install dependencies:
-    ```bash
-    npm install
-    ```
-3.  Start the development server:
-    ```bash
-    npm run dev
-    ```
-    The application will be available at `http://localhost:5173` (or another port if 5173 is busy).
 
 ## Project Structure
 
@@ -162,4 +124,4 @@ describe('Prefill Source Logic', () => {
 });
 ```
 
-This provides a starting point for building out a robust test suite.
+
