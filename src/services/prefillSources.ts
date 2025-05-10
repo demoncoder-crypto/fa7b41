@@ -38,7 +38,6 @@ const getDirectDependencyOptions = (
 ): PrefillOption[] => {
   const options: PrefillOption[] = [];
   const directUpstreamIds = getUpstreamNodeIds(targetNode.id, allEdges);
-  console.log(`[PrefillSources] Direct upstream IDs for ${targetNode.id} (${targetNode.data.label}):`, directUpstreamIds);
 
   directUpstreamIds.forEach(sourceNodeId => {
     const sourceNode = allNodes.find(n => n.id === sourceNodeId);
@@ -46,7 +45,7 @@ const getDirectDependencyOptions = (
       sourceNode.data.fields.forEach((sourceField: FormField) => {
         options.push({
           id: `${sourceNode.id}.${sourceField.id}`,
-          label: `[DIRECT] ${sourceNode.data.label} - ${sourceField.name}`,
+          label: `${sourceNode.data.label} - ${sourceField.name}`,
           sourceNodeId: sourceNode.id,
           sourceFieldId: sourceField.id,
           sourceType: 'form',
@@ -79,7 +78,7 @@ const getTransitiveDependencyOptions = (
         sourceNode.data.fields.forEach((sourceField: FormField) => {
           options.push({
             id: `${sourceNode.id}.${sourceField.id}`,
-            label: `[TRANSITIVE] ${sourceNode.data.label} - ${sourceField.name}`,
+            label: `${sourceNode.data.label} - ${sourceField.name}`,
             sourceNodeId: sourceNode.id,
             sourceFieldId: sourceField.id,
             sourceType: 'form',
@@ -89,7 +88,6 @@ const getTransitiveDependencyOptions = (
       }
     }
   });
-  console.log(`[PrefillSources] Transitive upstream IDs for ${targetNode.id} (${targetNode.data.label}):`, transitiveOnlyIds);
   return options;
 };
 
@@ -102,27 +100,26 @@ const getGlobalDataOptions = (
   const mockGlobalData: PrefillOption[] = [
     {
       id: 'global.currentUserEmail',
-      label: '[GLOBAL] Global - Current User Email',
+      label: 'Global - Current User Email',
       sourceNodeId: 'global', // Special ID for global sources
       sourceFieldId: 'currentUserEmail',
       sourceType: 'global',
     },
     {
       id: 'global.currentDate',
-      label: '[GLOBAL] Global - Current Date',
+      label: 'Global - Current Date',
       sourceNodeId: 'global',
       sourceFieldId: 'currentDate',
       sourceType: 'global',
     },
     {
       id: 'global.clientName',
-      label: '[GLOBAL] Global - Client Name (Mocked)',
+      label: 'Global - Client Name (Mocked)',
       sourceNodeId: 'global',
       sourceFieldId: 'clientName',
       sourceType: 'global',
     },
   ];
-  // console.log('[PrefillSources] Global data options:', mockGlobalData); // Keep or remove logging as desired
   return mockGlobalData;
 };
 
@@ -134,7 +131,6 @@ export const getAvailablePrefillOptions = (
   allNodes: AppNode[],
   allEdges: AppEdge[],
 ): PrefillOption[] => {
-  console.log(`[PrefillSources] Getting options for Target: ${targetNode.data.label} (ID: ${targetNode.id}), Field: ${targetField.name} (ID: ${targetField.id})`);
   // "You should design your code so that any combination of these data sources can be easily used without code changes.
   // Moreover, you should design for easy support of future, new data sources."
   // This array acts as a registry of data source providers.
@@ -152,12 +148,6 @@ export const getAvailablePrefillOptions = (
   dataSourceProviders.forEach(provider => {
     allOptions = allOptions.concat(provider(targetNode, targetField, allNodes, allEdges));
   });
-
-  console.log('[PrefillSources] All available options generated:', allOptions);
-
-  // TODO: Add filtering logic if certain field types can only be prefilled by compatible types.
-  // For example, an 'email' field should ideally only be prefilled by other 'email' or 'text' fields.
-  // This would involve inspecting targetField.type and sourceField.type (if available).
 
   return allOptions;
 }; 

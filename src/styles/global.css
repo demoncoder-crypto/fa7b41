@@ -165,4 +165,279 @@ body {
   width: 8px;
   height: 8px;
   background: #718096 !important;
-} 
+}
+
+/* global.css - Add these new styles, or modify existing if names clash */
+
+.prefill-panel-header {
+  margin-bottom: 20px;
+}
+
+.prefill-panel-header h2 {
+  font-size: 1.5em;
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.prefill-panel-header p {
+  font-size: 0.9em;
+  color: #666;
+  margin: 0;
+}
+
+.prefill-toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* To push toggle to the right if that's the design */
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f8f9fa; /* Light background for toggle section */
+  border-radius: 6px;
+}
+
+/* Basic toggle switch styles */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 28px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2196F3; /* Blue when on */
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+.field-item-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.field-item-container:hover {
+  border-color: #007bff; /* Highlight on hover */
+  box-shadow: 0 0 0 2px rgba(0,123,255,.25);
+}
+
+.field-item-unconfigured {
+  /* Styles for unconfigured state if different from default .field-item-container */
+}
+
+.field-item-configured {
+  background-color: #e9ecef; /* Slightly different background for configured items */
+  cursor: default; /* Not clickable as a whole, only X is */
+}
+
+.field-item-configured:hover {
+   border-color: #e0e0e0;
+   box-shadow: none;
+}
+
+.field-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #333;
+}
+
+.field-info .db-icon {
+  width: 20px;
+  height: 20px;
+  fill: #6c757d; /* Icon color */
+}
+
+.field-name {
+  font-weight: 500;
+}
+
+.prefill-mapping-text {
+  font-size: 0.9em;
+  color: #0056b3; /* Darker blue for mapping text */
+}
+
+.clear-prefill-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.clear-prefill-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: #dc3545; /* Red for delete icon */
+}
+
+.clear-prefill-btn:hover svg {
+  fill: #c82333; /* Darker red on hover */
+}
+
+/* global.css - Add these new styles for the redesigned modal */
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-header h4 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.modal-search-bar {
+  margin-bottom: 15px;
+  padding: 8px;
+  width: calc(100% - 16px); /* Full width minus padding */
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.data-tree-container {
+  /* Max height and overflow will be on .modal-content already */
+}
+
+.tree-node {
+  list-style: none;
+  padding-left: 0; /* Remove default ul padding */
+}
+
+.tree-node-item {
+  padding: 6px 0;
+}
+
+.tree-node-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.tree-node-label:hover {
+  background-color: #e9ecef;
+}
+
+.tree-node-label.selected {
+  background-color: #007bff; /* Blue for selected item */
+  color: white;
+}
+
+.tree-node-label.selected .tree-toggler {
+  border-top-color: white; /* Make arrow white if selected */
+}
+
+.tree-toggler {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #6c757d; /* Arrow color */
+  margin-right: 8px;
+  transition: transform 0.2s ease;
+}
+
+.tree-toggler.expanded {
+  transform: rotate(90deg);
+}
+
+.tree-node-children {
+  list-style: none;
+  padding-left: 25px; /* Indent children */
+  /* transition: max-height 0.3s ease-in-out; */
+  /* overflow: hidden; */
+}
+
+/* Child field items */
+.tree-node-children .tree-node-label {
+  font-size: 0.9em;
+  /* padding-left: 10px; */ /* Already indented by parent padding */
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 15px;
+  margin-top: 15px;
+  border-top: 1px solid #dee2e6;
+}
+
+.modal-actions button {
+  padding: 8px 15px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.modal-actions .cancel-btn {
+  background-color: #f8f9fa;
+  border-color: #ced4da;
+  color: #212529;
+}
+
+.modal-actions .cancel-btn:hover {
+  background-color: #e2e6ea;
+}
+
+.modal-actions .select-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.modal-actions .select-btn:hover {
+  background-color: #0069d9;
+}
+
+.modal-actions .select-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* Remove old modal list styles to avoid conflict if they are too generic */
+/* .modal-content ul, .modal-content li might need to be removed or made more specific */ 
