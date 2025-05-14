@@ -153,7 +153,7 @@ function App() {
           allEdges={edges} // Pass all edges for dependency lookup
         />
       )}
-    </div>
+      </div>
   );
 }
 

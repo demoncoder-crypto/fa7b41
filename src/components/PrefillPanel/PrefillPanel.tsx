@@ -43,6 +43,7 @@ export const PrefillPanel: React.FC<PrefillPanelProps> = ({
 
   const handleOpenModal = (field: FormField) => {
     setSelectedFieldForPrefill(field);
+    console.log('(Video Demo) Opening modal for:', field.name);
     setIsModalOpen(true);
   };
 
@@ -67,6 +68,7 @@ export const PrefillPanel: React.FC<PrefillPanelProps> = ({
 
   const handleClearPrefill = (fieldId: string) => {
     onUpdatePrefill(node.id, fieldId, null);
+    console.log('(Video Demo) Clearing prefill for field ID:', fieldId, 'on node:', node.id);
   };
 
   const availableOptions = useMemo(() => {
@@ -75,9 +77,12 @@ export const PrefillPanel: React.FC<PrefillPanelProps> = ({
   }, [node, selectedFieldForPrefill, allNodes, allEdges]);
 
   return (
-    <div className="prefill-panel">
-      <button onClick={onClose} className="close-panel-btn" title="Close Panel" 
-              style={{ position: 'absolute', top: '15px', right: '15px', background: 'none', border: 'none', fontSize: '1.5em', cursor: 'pointer', color: '#888' }}>
+    <div className="prefill-panel" data-prefill-enabled={String(prefillEnabled)}>
+      <button 
+        onClick={onClose} 
+        className="close-panel-btn" 
+        title="Close Panel" 
+        style={{ position: 'absolute', top: '10px', right: '10px', background: 'none', border: 'none', fontSize: '1.5em', cursor: 'pointer', color: '#888', zIndex: 11 }}>
         &times;
       </button>
       
@@ -97,12 +102,15 @@ export const PrefillPanel: React.FC<PrefillPanelProps> = ({
       {node.data.fields.length === 0 && <p>This form has no fields.</p>}
       {node.data.fields.map(field => {
         const currentPrefill = prefillConfig[field.id];
+        const canConfigure = prefillEnabled; 
+
         return (
           <div 
             key={field.id} 
-            className={`field-item-container ${currentPrefill ? 'field-item-configured' : 'field-item-unconfigured'}`}
-            onClick={!currentPrefill ? () => handleOpenModal(field) : undefined}
-            title={!currentPrefill ? `Configure prefill for ${field.name}` : ''}
+            className={`field-item-container ${currentPrefill ? 'field-item-configured' : 'field-item-unconfigured'} ${!canConfigure && !currentPrefill ? 'disabled' : ''}`}
+            onClick={!currentPrefill && canConfigure ? () => handleOpenModal(field) : undefined}
+            title={!currentPrefill && canConfigure ? `Configure prefill for ${field.name}` : (currentPrefill ? `Prefilled from ${currentPrefill.sourceNodeLabel}.${currentPrefill.sourceFieldLabel}`: `Prefill disabled for form`)}
+            style={{ cursor: (!currentPrefill && canConfigure) ? 'pointer' : 'default' }}
           >
             <div className="field-info">
               <DatabaseIcon />
@@ -113,12 +121,21 @@ export const PrefillPanel: React.FC<PrefillPanelProps> = ({
                 <span className="prefill-mapping-text">
                   {currentPrefill.sourceNodeLabel || currentPrefill.sourceNodeId}.{currentPrefill.sourceFieldLabel || currentPrefill.sourceFieldId}
                 </span>
-                <button onClick={(e) => { e.stopPropagation(); handleClearPrefill(field.id); }} className="clear-prefill-btn" title="Clear Prefill">
+                <button 
+                  onClick={(e) => { 
+                    if (!canConfigure) return;
+                    e.stopPropagation(); 
+                    handleClearPrefill(field.id); 
+                  }} 
+                  className="clear-prefill-btn" 
+                  title="Clear Prefill"
+                  disabled={!canConfigure}
+                >
                   <CloseIcon />
                 </button>
               </div>
             ) : (
-              <span style={{color: '#007bff', fontSize: '1.5em'}}>+</span> // Simple plus icon for unconfigured
+              canConfigure && <span style={{color: '#007bff', fontSize: '1.5em'}}>+</span>
             )}
           </div>
         );
@@ -128,8 +145,20 @@ export const PrefillPanel: React.FC<PrefillPanelProps> = ({
         <PrefillSourceModal
           availableOptions={availableOptions}
           allNodes={allNodes}
-          onClose={handleCloseModal}
-          onSelectOption={handleSelectPrefillOption}
+          onClose={() => setIsModalOpen(false)}
+          onSelectOption={(option) => {
+            if (selectedFieldForPrefill) {
+              const newConfig: PrefillConfig = {
+                sourceNodeId: option.sourceNodeId,
+                sourceFieldId: option.sourceFieldId,
+                sourceType: option.sourceType,
+                sourceNodeLabel: allNodes.find(n => n.id === option.sourceNodeId)?.data.label,
+                sourceFieldLabel: (allNodes.find(n => n.id === option.sourceNodeId)?.data.fields.find(f => f.id === option.sourceFieldId)?.name || option.sourceFieldId),
+              };
+              onUpdatePrefill(node.id, selectedFieldForPrefill.id, newConfig);
+            }
+            setIsModalOpen(false);
+          }}
         />
       )}
     </div>

@@ -31,9 +31,21 @@ export const PrefillSourceModal: React.FC<PrefillSourceModalProps> = ({
 
     availableOptions.forEach(opt => {
       if (!groups[opt.sourceNodeId]) {
-        const nodeLabel = opt.sourceNodeLabel || 
-                          (opt.sourceType === 'global' ? 'Global Data' : 
-                           (allNodes.find(n => n.id === opt.sourceNodeId)?.data.label || opt.sourceNodeId));
+        let nodeLabel = opt.sourceNodeId; // Default to ID
+        if (opt.sourceType === 'global') {
+          nodeLabel = 'Global Data';
+        } else {
+          // For forms, try to find the label from allNodes
+          // The opt.label is "Form Name - Field Name", so we can extract "Form Name"
+          // Or, more robustly, use allNodes with opt.sourceNodeId
+          const foundNode = allNodes.find(n => n.id === opt.sourceNodeId);
+          if (foundNode) {
+            nodeLabel = foundNode.data.label;
+          } else if (opt.label && opt.label.includes(' - ')) {
+            // Fallback to parsing from opt.label if allNodes lookup fails (should not happen if data is consistent)
+            nodeLabel = opt.label.substring(0, opt.label.indexOf(' - '));
+          }
+        }
         groups[opt.sourceNodeId] = {
           sourceNodeId: opt.sourceNodeId,
           sourceNodeLabel: nodeLabel,
