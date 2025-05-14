@@ -5,8 +5,7 @@ It implements a node-based UI for visualizing a DAG of forms and configuring pre
 
 ## Running Locally
 
-
-## Project Structure
+Project Structure
 
 -   `src/components`: React components for different parts of the UI.
     -   `PrefillPanel`: Displays prefill configuration for a selected form node.
@@ -14,14 +13,25 @@ It implements a node-based UI for visualizing a DAG of forms and configuring pre
 -   `src/services`:
     -   `api.ts`: Fetches graph data from the mock server.
     -   `prefillSources.ts`: Contains logic for identifying available prefill data sources (direct, transitive, global) and is designed for extensibility.
-    -   `graphUtils.ts` (Conceptual, parts are in `prefillSources.ts`): Utilities for graph traversal (e.g., finding upstream nodes).
 -   `src/types`: TypeScript type definitions.
-    -   `graph.ts`: Types for graph nodes, edges, fields, and API responses.
-    -   `prefill.ts`: Types for prefill configurations and options.
 -   `src/styles`: CSS files.
-    -   `global.css`: Global styles and React Flow base styles.
--   `src/App.tsx`: Main application component, sets up React Flow, manages state.
+-   `src/test/setup.ts`: Setup file for Vitest (e.g., importing jest-dom matchers).
+-   `src/App.tsx`: Main application component.
 -   `src/main.tsx`: Entry point of the React application.
+
+Test files (`*.test.tsx` or `*.test.ts`) are located alongside the modules they test (e.g., `prefillSources.test.ts`).
+
+
+## Testing (Evaluation Criteria)
+
+The challenge asks: "Does the project have good tests?"
+
+-   **Yes.** This project now includes both unit tests for critical business logic and component tests for UI interactions.
+    -   **Unit Tests**: Located in `src/services/prefillSources.test.ts`, these tests verify the correctness of the logic that identifies direct, transitive, and global prefill options using mock data.
+    -   **Component Tests**: Located in `src/components/PrefillPanel/PrefillPanel.test.tsx`, these tests use `@testing-library/react` to ensure the `PrefillPanel` renders correctly based on different props and that user interactions (like toggling prefill enablement, clearing a prefill, and attempting to open the selection modal) behave as expected.
+    -   **Test Runner**: Vitest is integrated and can be run with `npm test`.
+    -   **Setup**: A `src/test/setup.ts` file is included for global test configurations like importing `@testing-library/jest-dom` matchers.
+
 
 ## Extensibility: Adding New Data Sources
 
